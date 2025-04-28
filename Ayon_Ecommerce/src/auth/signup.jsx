@@ -82,17 +82,20 @@ export default function SignupPage() {
 
       const data = await response.json();
       setSuccess("Signup successful!");
-      console.log("Response Data:", data);
 
-      // Store token in localStorage
+      // Store token and user info in localStorage
       if (data.token) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('userInfo', JSON.stringify({
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          phone: data.user.phone
+        }));
       }
 
-      // Navigate to login after signup success
-      setTimeout(() => {
-        navigate("/signin");
-      }, 1500);
+      // Navigate to home page after signup success
+      window.location.href = "/";
 
     } catch (err) {
       console.error("Error during signup:", err.message);

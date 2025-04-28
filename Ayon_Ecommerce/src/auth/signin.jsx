@@ -1,18 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const API_URL = "http://localhost:4000/users/login";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // If already logged in, redirect
+  useEffect(() => {
+    const tokenData = localStorage.getItem('token');
+    const userInfo = localStorage.getItem('userInfo');
+    if (tokenData && userInfo) {
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,32 +43,36 @@ export default function LoginPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        })
+        body: JSON.stringify(formData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Invalid email or password");
-      }
-
       const data = await response.json();
-      console.log("Login successful:", data);
 
-      // Store token in localStorage
-      if (data.token) {
-        localStorage.setItem('token', data.token);
+      if (!response.ok) {
+        throw new Error(data.message || "Invalid email or password");
       }
 
-      // Show success message
-      setErrorMessage("Login successful!");
-      
-      // Redirect to home page after successful login
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1500);
+      // Store token with expiration
+      const tokenData = {
+        token: data.token,
+        expiresAt: new Date().getTime() + (24 * 60 * 60 * 1000) // 24 hours
+      };
+      localStorage.setItem('token', JSON.stringify(tokenData));
+
+      // Store user info
+      const userInfo = {
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email,
+        phone: data.user.phone,
+        lastLogin: new Date().toISOString(),
+      };
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+      // Set session cookie
+      document.cookie = `session=${data.token}; path=/; max-age=${24 * 60 * 60}`;
+
+      navigate('/'); // redirect after login
 
     } catch (error) {
       setErrorMessage(error.message || "Something went wrong. Please try again.");
@@ -154,15 +168,9 @@ export default function LoginPage() {
             </p>
 
             <div className="flex justify-center space-x-4 mt-4">
-              <a href="#" className="text-gray-600 underline">
-                Help
-              </a>
-              <a href="#" className="text-gray-600 underline">
-                Privacy
-              </a>
-              <a href="#" className="text-gray-600 underline">
-                Terms
-              </a>
+              <a href="#" className="text-gray-600 underline">Help</a>
+              <a href="#" className="text-gray-600 underline">Privacy</a>
+              <a href="#" className="text-gray-600 underline">Terms</a>
             </div>
           </div>
         </main>
