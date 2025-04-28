@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+const API_URL = "http://localhost:4000/users";
+
 export default function SignupPage() {
   const navigate = useNavigate(); 
 
@@ -19,7 +21,6 @@ export default function SignupPage() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [reenterPasswordVisible, setReenterPasswordVisible] = useState(false);
 
-  const API_URL = "https://ndkj1lt9-4000.inc1.devtunnels.ms/api/users";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,11 +70,11 @@ export default function SignupPage() {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        if (response.status === 400 && errorText.includes("User already exists")) {
-          alert("User or mobile number already exists. Please try logging in.");
+        const errorData = await response.json();
+        if (response.status === 400 && errorData.message.includes("already exists")) {
+          setError("User or mobile number already exists. Please try logging in.");
         } else {
-          throw new Error(`Error ${response.status}: ${errorText}`);
+          throw new Error(errorData.message || "Failed to register");
         }
         setLoading(false);
         return;
@@ -83,14 +84,19 @@ export default function SignupPage() {
       setSuccess("Signup successful!");
       console.log("Response Data:", data);
 
-      // Navigate to login after signup success (optional)
+      // Store token in localStorage
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+
+      // Navigate to login after signup success
       setTimeout(() => {
         navigate("/signin");
       }, 1500);
 
     } catch (err) {
       console.error("Error during signup:", err.message);
-      setError("Failed to register. Please try again.");
+      setError(err.message || "Failed to register. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -100,7 +106,7 @@ export default function SignupPage() {
     <>
       <Navbar />
 
-      <div className="max-w-[460px] mx-auto bg-white p-6 rounded-lg shadow-md relative mt-8">
+      <div className="max-w-[460px] mx-auto bg-white p-6 rounded-lg shadow-md relative mt-[-30px]">
         <header className="relative">
           <div className="flex justify-center mt-6">
             <img

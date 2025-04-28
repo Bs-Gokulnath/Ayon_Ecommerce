@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import CryptoJS from "crypto-js";
+
+const API_URL = "http://localhost:4000/users/login";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -21,41 +22,44 @@ export default function LoginPage() {
     }));
   };
 
-  const ENCRYPTION_KEY = "your_secret_key_32bytes_long"; // Should match backend
-  const IV_LENGTH = 16;
-
-  const encryptData = (data) => {
-    const iv = CryptoJS.lib.WordArray.random(IV_LENGTH);
-    const encrypted = CryptoJS.AES.encrypt(data, CryptoJS.enc.Utf8.parse(ENCRYPTION_KEY), {
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
-    return `${iv.toString(CryptoJS.enc.Hex)}:${encrypted.ciphertext.toString(CryptoJS.enc.Hex)}`;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMessage("");
 
-    const encryptedEmail = encryptData(formData.email);
-    const encryptedPassword = encryptData(formData.password);
-
-    const endpoint = `https://ndkj1lt9-4000.inc1.devtunnels.ms/api/users?email=${encodeURIComponent(
-      encryptedEmail
-    )}&password=${encodeURIComponent(encryptedPassword)}&encrypted=true`;
-
     try {
-      const response = await fetch(endpoint, { method: "GET" });
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        })
+      });
 
       if (!response.ok) {
-        throw new Error("Invalid email or password.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Invalid email or password");
       }
 
       const data = await response.json();
       console.log("Login successful:", data);
-      alert("Login successful!");
+
+      // Store token in localStorage
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+
+      // Show success message
+      setErrorMessage("Login successful!");
+      
+      // Redirect to home page after successful login
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1500);
+
     } catch (error) {
       setErrorMessage(error.message || "Something went wrong. Please try again.");
     } finally {
