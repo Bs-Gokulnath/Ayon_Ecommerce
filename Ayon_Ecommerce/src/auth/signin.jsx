@@ -84,7 +84,7 @@ export default function LoginPage() {
   return (
     <div>
       <Navbar />
-      <div className="max-w-[460px] mx-auto bg-white p-6 rounded-lg shadow-md relative mt-8">
+      <div className="max-w-[460px] mx-auto bg-white p-6 rounded-lg shadow-md relative mt-[-150px]">
         <header className="relative">
           <div className="flex justify-center mt-6">
             <img

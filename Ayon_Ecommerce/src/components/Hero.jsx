@@ -12,7 +12,7 @@ const HeroSection = ({
   },
 }) => {
   return (
-    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 mt-[-180px]">
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 mt-[-300px]">
       <div className="flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-16">
         {/* Left Section */}
         <div className="w-full lg:max-w-[529px]">

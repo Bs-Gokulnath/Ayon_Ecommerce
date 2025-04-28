@@ -109,7 +109,7 @@ export default function SignupPage() {
     <>
       <Navbar />
 
-      <div className="max-w-[460px] mx-auto bg-white p-6 rounded-lg shadow-md relative mt-[-30px]">
+      <div className="max-w-[460px] mx-auto bg-white p-6 rounded-lg shadow-md relative mt-[-160px]">
         <header className="relative">
           <div className="flex justify-center mt-6">
             <img

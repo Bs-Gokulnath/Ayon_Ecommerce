@@ -62,7 +62,7 @@ const ProductDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="p-4 md:p-6 bg-gray-100 min-h-screen relative">
+      <div className="p-4 md:p-6 bg-gray-100 min-h-screen relative mt-[-150px]">
         {/* Modal for Image Preview */}
         {modalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
