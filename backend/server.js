@@ -89,3 +89,85 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);
 });
+
+
+
+// const express = require("express");
+// const mongoose = require("mongoose");
+// const cors = require("cors");
+
+// const app = express();
+// const PORT = 4000;
+
+// // Middleware
+// app.use(cors());
+// app.use(express.json());
+
+// // MongoDB connection
+// mongoose.connect("mongodb+srv://bsgokulnath18:gokul%2318@backendprac1.wvwyk.mongodb.net/ayon?retryWrites=true&w=majority", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// }).then(() => console.log("MongoDB connected"))
+//   .catch((err) => console.error("Connection error:", err));
+
+// // Schema and Model
+// const userSchema = new mongoose.Schema({
+//   name: String,
+//   email: String,
+//   phone: String,
+//   password: String,
+//   address: String,
+// });
+
+// const User = mongoose.model("User", userSchema);
+
+// // ✅ Create User
+// app.post("/users", async (req, res) => {
+//   try {
+//     const user = new User(req.body);
+//     await user.save();
+//     res.status(201).send({ message: "User created", user });
+//   } catch (err) {
+//     res.status(500).send("Create failed");
+//   }
+// });
+
+// // ✅ Read All Users
+// app.get("/users", async (req, res) => {
+//   try {
+//     const users = await User.find();
+//     res.send(users);
+//   } catch (err) {
+//     res.status(500).send("Fetch failed");
+//   }
+// });
+
+// // ✅ Update User
+// app.put("/users/:id", async (req, res) => {
+//   try {
+//     const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+//     res.send({ message: "User updated", user });
+//   } catch (err) {
+//     res.status(500).send("Update failed");
+//   }
+// });
+
+// // ✅ Delete User
+// app.delete("/users/:id", async (req, res) => {
+//   try {
+//     await User.findByIdAndDelete(req.params.id);
+//     res.send({ message: "User deleted" });
+//   } catch (err) {
+//     res.status(500).send("Delete failed");
+//   }
+// });
+
+// // Default route
+// app.get("/", (req, res) => {
+//   res.send("User CRUD server is running");
+// });
+
+// // Start server
+// app.listen(PORT, () => {
+//   console.log(`Server running at http://localhost:${PORT}`);
+// });
