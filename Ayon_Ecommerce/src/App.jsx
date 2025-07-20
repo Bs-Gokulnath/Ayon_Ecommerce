@@ -5,6 +5,7 @@ import LoginPage from './auth/signin'
 import Home from './pages/Homepage'
 import ProductDetails from './components/Product_card'
 import UserProfile from './pages/Profile'
+import AllProduct from './pages/All_Products'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path='/all-products' element={<AllProduct/>} />
       </Routes>
     </BrowserRouter>
   )

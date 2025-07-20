@@ -1,6 +1,8 @@
 import React from "react";
 import "@fontsource/lexend";
 import CountUp from "react-countup";
+import { Link } from 'react-router-dom';
+
 
 const HeroSection = ({
   title = "WEAR YOUR CONFIDENCE DAILY",
@@ -27,12 +29,14 @@ const HeroSection = ({
             {description}
           </p>
 
-          <button
-            className="bg-black text-white px-6 sm:px-10 lg:px-12 py-2 sm:py-3 lg:py-4 rounded-full 
-            font-medium hover:bg-gray-800 transition-colors text-sm sm:text-base lg:text-lg"
-          >
-            Shop Now
-          </button>
+          <Link to="/all-products">
+            <button
+              className="bg-black text-white px-6 sm:px-10 lg:px-12 py-2 sm:py-3 lg:py-4 rounded-full 
+              font-medium hover:bg-gray-800 transition-colors text-sm sm:text-base lg:text-lg"
+            >
+              Shop Now
+            </button>
+          </Link>
 
           {/* Stats Section */}
           <div className="flex flex-wrap sm:flex-nowrap items-center mt-8 sm:mt-12 lg:mt-16 gap-4 sm:gap-6 lg:gap-8">
